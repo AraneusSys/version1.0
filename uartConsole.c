@@ -1,34 +1,7 @@
-#include <string.h>
-#include <stdio.h>
-/* XDCtools Header files */
-#include <xdc/std.h>
-#include <xdc/cfg/global.h>
-#include <xdc/runtime/System.h>
-#include <xdc/runtime/Error.h>
-#ifdef XDC_TIMESTAMP_SUPPORT
-#include <xdc/runtime/Timestamp.h>			//used for Timestamp() calls
-#endif
 
-#include <ti/sysbios/knl/Task.h>
-#include <ti/sysbios/knl/Clock.h>
-//#include <ti/sysbios/knl/Event.h>
-#include <ti/sysbios/knl/Semaphore.h>
-#include <ti/sysbios/knl/Queue.h>
-#include <ti/sysbios/BIOS.h>
-#include <ti/sysbios/gates/GateMutex.h>
+#include "config_araneus_system.h"
 
 
-/* TI-RTOS Header files */
-#include <ti/drivers/PIN.h>
-#include <ti/drivers/UART.h>
-
-/* Utils/Board Header files */
-//#include "util.h"
-#include "Board.h"
-
-#include "uartConsole.h"
-#include "uartConsole_shell.h"
-#include <xdc/runtime/Log.h>
 
 
 static PIN_Handle consoleLedPinHandle;

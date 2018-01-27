@@ -1,22 +1,6 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>     /* atoi */
+#include "config_araneus_system.h"
 
-/* XDCtools Header files */
-#include <xdc/std.h>
-#include <xdc/cfg/global.h>
-#include <xdc/runtime/System.h>
-#include <xdc/runtime/Error.h>
 
-#include <ti/sysbios/knl/Task.h>
-#include <ti/sysbios/knl/Clock.h>
-#include <ti/sysbios/knl/Semaphore.h>
-#include <ti/sysbios/knl/Queue.h>
-#include <ti/sysbios/BIOS.h>
-#include <ti/sysbios/hal/Seconds.h>
-#include <time.h>
-#include "uartConsole.h"
-#include "uartConsole_shell.h"
 
 struct ptEntry {
   char *cmdStr;
