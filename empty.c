@@ -55,11 +55,18 @@
 /* Board Header file */
 #include "Board.h"
 
+#include "uartConsole.h"
+#include "uartConsole_shell.h"
+
+
+
 #define TASKSTACKSIZE   512
 
 Task_Struct task0Struct;
 Char task0Stack[TASKSTACKSIZE];
 
+UART_Handle uartHandle;
+/***** Defines *****/
 /*
  *  ======== heartBeatFxn ========
  *  Toggle the Board_LED0. The Task_sleep is determined by arg0 which
@@ -76,39 +83,71 @@ Void heartBeatFxn(UArg arg0, UArg arg1)
 /*
  *  ======== main ========
  */
+/*
+ *  ======== main ========
+ */
 int main(void)
 {
+
+
+  Board_initGeneral();
+  // Board_initEMAC();
+  Board_initGPIO();
+  // Board_initI2C();
+  // Board_initSDSPI();
+  // Board_initSPI();
+   Board_initUART();
+  // Board_initUSB(Board_USBDEVICE);
+  // Board_initUSBMSCHFatFs();
+  // Board_initWatchdog();
+  // Board_initWiFi();
+
+
+
+
+	UART_Params uartParams;
+    UART_Params_init(&uartParams);
+    // UART READ
+    uartParams.readDataMode = UART_DATA_BINARY;
+    uartParams.readMode = UART_MODE_CALLBACK;
+    uartParams.readCallback = uartReadCallback;
+    //uartParams.readReturnMode = UART_RETURN_FULL;
+    uartParams.writeDataMode = UART_DATA_BINARY;
+    uartParams.readEcho = UART_ECHO_OFF;
+    uartParams.baudRate = 921600;
+    uartHandle  = UART_open(Board_UART0, &uartParams);
+
+//    const unsigned char hello[] = "Hello World\n";
+//    UART_write(uartHandle, hello, sizeof(hello));
+
+//    ledPinHandle = PIN_open(&ledPinState, pinTable);
+//    if(!ledPinHandle)
+//    {
+//        System_abort("Error initializing board LED pins\n");
+//    }
+//
+//
+//    RxTask_init(ledPinHandle);
+
+
+
+//    uartConsole_createTask(uartHandle, ledPinHandle);
+    uartConsole_createTask(uartHandle);
+
+//  events_createTask();
+
+
+
+/*
     Task_Params taskParams;
-    /* Call board init functions */
-    Board_initGeneral();
-    // Board_initEMAC();
-    Board_initGPIO();
-    // Board_initI2C();
-    // Board_initSDSPI();
-    // Board_initSPI();
-    // Board_initUART();
-    // Board_initUSB(Board_USBDEVICE);
-    // Board_initUSBMSCHFatFs();
-    // Board_initWatchdog();
-    // Board_initWiFi();
-
-    /* Construct heartBeat Task  thread */
     Task_Params_init(&taskParams);
-    taskParams.arg0 = 1000;
-    taskParams.stackSize = TASKSTACKSIZE;
-    taskParams.stack = &task0Stack;
-    Task_construct(&task0Struct, (Task_FuncPtr)heartBeatFxn, &taskParams, NULL);
-
-     /* Turn on user LED */
-    GPIO_write(Board_LED0, Board_LED_ON);
-
-    System_printf("Starting the example\nSystem provider is set to SysMin. "
-                  "Halt the target to view any SysMin contents in ROV.\n");
-    /* SysMin will only print to the console when you call flush or exit */
-    System_flush();
+    taskParams.stack = taskStartStack;
+    taskParams.stackSize = sizeof(taskStartStack);
+    Task_construct(&taskStart, taskStartFxn, &taskParams, NULL);
+*/
 
     /* Start BIOS */
-    BIOS_start();
 
+    BIOS_start();
     return (0);
 }
